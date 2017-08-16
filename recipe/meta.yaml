@@ -12,21 +12,28 @@ source:
 
 build:
     number: 0
-    skip: True  # [win]
+    skip: True  # [win and py36]
+    features:
+      - vc9  # [win and py27]
+      - vc14  # [win and py>=35]
+
 
 requirements:
     build:
-      - gcc  # [not osx]
-      - llvm  # [osx]
+      - toolchain
+      - cmake  # [win]
 
     run:
-      - libgcc  # [not osx]
-
+      - libgcc  # [linux]
 
 test:
+    requires:
+      - python {{ os.environ.get('PY_VER', '') + '*' }}  # [win]
     files:
       - demo.c
-
+    commands:
+      - lp_solve -h
+ 
 about:
     home: http://lpsolve.sourceforge.net/5.5/
     summary: lp_solve is a Mixed Integer Linear Programming (MILP) solver
