@@ -12,20 +12,28 @@ source:
 
 build:
     number: 0
-    skip: True  # [win]
+    skip: True  # [win and py36]
+    features:
+      - vc9  # [win and py27]
+      - vc14  # [win and py>=35]
+
 
 requirements:
     build:
-      - gcc  # [not osx]
-      - llvm  # [osx]
-
-    run:
-      - libgcc  # [not osx]
-
+      - toolchain
+      - cmake  # [win]
 
 test:
+    requires:
+      - python {{ os.environ.get('PY_VER', '') + '*' }}  # [win]
     files:
       - demo.c
+    commands:
+      - lp_solve -h
+      - test -f ${PREFIX}/include/lpsolve/lp_lib.h  # [unix]
+      - if not exist %PREFIX%\\Library\\include\\lpsolve\\lp_lib.h exit 1  # [win]
+      - python -c "import ctypes; ctypes.cdll[r'${PREFIX}/lib/liblpsolve55${SHLIB_EXT}']"  # [unix]
+      - python -c "import ctypes; ctypes.cdll[r'%PREFIX%\Library\bin\lpsolve55.dll']"  # [win]
 
 about:
     home: http://lpsolve.sourceforge.net/5.5/
@@ -35,4 +43,5 @@ about:
 
 extra:
     recipe-maintainers:
+      - jschueller
       - mictadlo
