@@ -22,6 +22,7 @@ requirements:
     build:
       - toolchain
       - cmake  # [win]
+      - python  # [win]
 
 test:
     requires:
