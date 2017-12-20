@@ -3,12 +3,10 @@ unamestr=$(uname)
 if [[ "$unamestr" == "Linux" ]]; then
   platform="linux"
   platarch="ux${ARCH}"
-  libname="liblpsolve55.so"
   ccc="ccc"
 elif [[ "$unamestr" == "Darwin" ]]; then
   platform="macos"
   platarch="osx64"
-  libname="liblpsolve55.dylib"
   ccc="ccc.osx"
 fi
 
@@ -26,7 +24,7 @@ if [[ "$platform" == "macos" ]]; then
   install_name_tool -id ${PREFIX}/lib/liblpsolve55.dylib liblpsolve55.dylib
 fi
 
-cp ${libname} ${PREFIX}/lib/
+cp liblpsolve55${SHLIB_EXT} ${PREFIX}/lib/
 cd ../../../
 
 # build executable
