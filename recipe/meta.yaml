@@ -3,7 +3,7 @@
 
 package:
     name: {{ name|lower }}
-    version: {{ version }}    
+    version: {{ version }}
 
 source:
     fn: {{ name|lower }}_{{ version }}_source.tar.gz
@@ -11,18 +11,14 @@ source:
     md5: 3be57261fc41dd8e210f54017220d5f7
 
 build:
-    number: 0
-    skip: True  # [win and py35]
-    features:
-      - vc9  # [win and py27]
-      - vc14  # [win and py>=35]
+    number: 1
 
 
 requirements:
     build:
-      - toolchain
       - cmake  # [win]
-      - python  # [win]
+      - {{ compiler('c') }}
+    host:
 
 test:
     requires:
