@@ -14,14 +14,16 @@ Summary: lp_solve is a Mixed Integer Linear Programming (MILP) solver
 Current build status
 ====================
 
-Linux: [![Circle CI](https://circleci.com/gh/conda-forge/lp_solve-feedstock.svg?style=shield)](https://circleci.com/gh/conda-forge/lp_solve-feedstock)
-OSX: [![TravisCI](https://travis-ci.org/conda-forge/lp_solve-feedstock.svg?branch=master)](https://travis-ci.org/conda-forge/lp_solve-feedstock)
-Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/conda-forge/lp_solve-feedstock?svg=True)](https://ci.appveyor.com/project/conda-forge/lp-solve-feedstock/branch/master)
+[![Linux](https://img.shields.io/circleci/project/github/conda-forge/lp_solve-feedstock/master.svg?label=Linux)](https://circleci.com/gh/conda-forge/lp_solve-feedstock)
+[![OSX](https://img.shields.io/travis/conda-forge/lp_solve-feedstock/master.svg?label=macOS)](https://travis-ci.org/conda-forge/lp_solve-feedstock)
+[![Windows](https://img.shields.io/appveyor/ci/conda-forge/lp_solve-feedstock/master.svg?label=Windows)](https://ci.appveyor.com/project/conda-forge/lp-solve-feedstock/branch/master)
 
 Current release info
 ====================
-Version: [![Anaconda-Server Badge](https://anaconda.org/conda-forge/lp_solve/badges/version.svg)](https://anaconda.org/conda-forge/lp_solve)
-Downloads: [![Anaconda-Server Badge](https://anaconda.org/conda-forge/lp_solve/badges/downloads.svg)](https://anaconda.org/conda-forge/lp_solve)
+
+| Name | Downloads | Version | Platforms |
+| --- | --- | --- | --- |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-lp_solve-green.svg)](https://anaconda.org/conda-forge/lp_solve) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/lp_solve.svg)](https://anaconda.org/conda-forge/lp_solve) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/lp_solve.svg)](https://anaconda.org/conda-forge/lp_solve) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/lp_solve.svg)](https://anaconda.org/conda-forge/lp_solve) |
 
 Installing lp_solve
 ===================
