@@ -1,40 +1,13 @@
-platform="unknown"
-unamestr=$(uname)
-if [[ "$unamestr" == "Linux" ]]; then
-  platform="linux"
-  platarch="ux${ARCH}"
-  ccc="ccc"
-elif [[ "$unamestr" == "Darwin" ]]; then
-  platform="macos"
-  platarch="osx64"
-  ccc="ccc.osx"
-fi
+#!/bin/sh
 
-mkdir -p ${PREFIX}/bin
-mkdir -p ${PREFIX}/lib
-mkdir -p ${PREFIX}/include/lpsolve
+# see https://github.com/PADrend/ThirdParty
+cp ${RECIPE_DIR}/CMakeLists.txt ${RECIPE_DIR}/lpsolveConfig.cmake.in .
 
-# build library
-cd lpsolve55
-sed 's/-Wno-long-double//' < ${ccc} > ${ccc}.patched
-sh -x ${ccc}.patched
-cd bin/${platarch}
+mkdir build && cd build
 
-if [[ "$platform" == "macos" ]]; then
-  install_name_tool -id ${PREFIX}/lib/liblpsolve55.dylib liblpsolve55.dylib
-fi
-
-cp liblpsolve55${SHLIB_EXT} ${PREFIX}/lib/
-cd ../../../
-
-# build executable
-cd lp_solve
-sed 's/-Wno-long-double//' < ${ccc} > ${ccc}.patched
-sh ${ccc}.patched
-cp bin/${platarch}/lp_solve ${PREFIX}/bin/
-cd ..
-
-# install headers
-cp *.h ${PREFIX}/include/
-cp *.h ${PREFIX}/include/lpsolve/
+cmake \
+  -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_INSTALL_LIBDIR=lib \
+  -DCMAKE_PREFIX_PATH=${PREFIX} \
+  ..
+make install -j${CPU_COUNT}
 

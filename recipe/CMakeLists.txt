@@ -7,6 +7,10 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
+if (NOT DEFINED CMAKE_BUILD_TYPE)
+  set (CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
+endif ()
+
 project(lpsolve C)
 
 set(LPSOLVE_VERSION_MAJOR 5)
@@ -14,11 +18,13 @@ set(LPSOLVE_VERSION_MINOR 5)
 set(LPSOLVE_VERSION_PATCH 2)
 set(LPSOLVE_VERSION ${LPSOLVE_VERSION_MAJOR}.${LPSOLVE_VERSION_MINOR}.${LPSOLVE_VERSION_PATCH})
 
+option (BUILD_SHARED_LIBS "Build NLopt as a shared library" ON)
+
 # Set up install directories
 include(GNUInstallDirs)
 set(CMAKE_INSTALL_CMAKECONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/lpsolve)
 
-add_library(lpsolve55 SHARED
+add_library(lpsolve55
 	lp_MDO.c
 	shared/commonlib.c
 	shared/mmio.c
@@ -103,10 +109,6 @@ if(NOT HAVE_ISNAN)
 	set_property(TARGET lpsolve55 APPEND PROPERTY COMPILE_DEFINITIONS NOISNAN)
 endif()
 
-# Set version of library
-set_target_properties(lpsolve55 PROPERTIES VERSION ${LPSOLVE_VERSION}
-                                           SOVERSION ${LPSOLVE_VERSION_MAJOR})
-
 include (CheckLibraryExists)
 check_library_exists(m ceil "" HAVE_LIBM)
 if (HAVE_LIBM)
@@ -117,6 +119,10 @@ check_library_exists(dl dlopen "" HAVE_LIBDL)
 if (HAVE_LIBDL)
   target_link_libraries (lpsolve55 dl)
 endif ()
+
+# Set version of library
+set_target_properties(lpsolve55 PROPERTIES VERSION ${LPSOLVE_VERSION}
+                                           SOVERSION ${LPSOLVE_VERSION_MAJOR})
 
 # Install the library
 install(TARGETS lpsolve55 EXPORT LibraryExport
@@ -133,23 +139,23 @@ target_include_directories(lpsolve55 INTERFACE ${CMAKE_INSTALL_FULL_INCLUDEDIR}/
 install(EXPORT LibraryExport DESTINATION ${CMAKE_INSTALL_CMAKECONFIGDIR} FILE lpsolveTargets.cmake)
 
 # Create the configuration files
-# include(CMakePackageConfigHelpers)
-# get_property(LPSOLVE_DEFINITIONS TARGET lpsolve55 PROPERTY COMPILE_DEFINITIONS)
-# configure_package_config_file(lpsolveConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/lpsolveConfig.cmake
-#                               INSTALL_DESTINATION ${CMAKE_INSTALL_CMAKECONFIGDIR}
-#                               PATH_VARS CMAKE_INSTALL_CMAKECONFIGDIR
-#                               NO_SET_AND_CHECK_MACRO
-#                               NO_CHECK_REQUIRED_COMPONENTS_MACRO)
-# write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/lpsolveConfigVersion.cmake
-#                                  VERSION ${LPSOLVE_VERSION}
-#                                  COMPATIBILITY SameMajorVersion)
-# 
-# # Install the configuration files
-# install(FILES ${CMAKE_CURRENT_BINARY_DIR}/lpsolveConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/lpsolveConfigVersion.cmake
-#         DESTINATION ${CMAKE_INSTALL_CMAKECONFIGDIR})
+include(CMakePackageConfigHelpers)
+get_property(LPSOLVE_DEFINITIONS TARGET lpsolve55 PROPERTY COMPILE_DEFINITIONS)
+configure_package_config_file(lpsolveConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/lpsolveConfig.cmake
+                              INSTALL_DESTINATION ${CMAKE_INSTALL_CMAKECONFIGDIR}
+                              PATH_VARS CMAKE_INSTALL_CMAKECONFIGDIR
+                              NO_SET_AND_CHECK_MACRO
+                              NO_CHECK_REQUIRED_COMPONENTS_MACRO)
+write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/lpsolveConfigVersion.cmake
+                                 VERSION ${LPSOLVE_VERSION}
+                                 COMPATIBILITY SameMajorVersion)
 
+# Install the configuration files
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/lpsolveConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/lpsolveConfigVersion.cmake
+        DESTINATION ${CMAKE_INSTALL_CMAKECONFIGDIR})
+
+# lpsolve front-end
 add_executable (lp_solve lp_solve/lp_solve.c)
 target_include_directories(lp_solve PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_link_libraries (lp_solve lpsolve55)
 install (TARGETS lp_solve DESTINATION bin)
-

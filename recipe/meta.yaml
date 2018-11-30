@@ -16,7 +16,7 @@ build:
 
 requirements:
     build:
-      - cmake  # [win]
+      - cmake
       - {{ compiler('c') }}
     host:
 
