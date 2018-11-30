@@ -9,7 +9,7 @@ To compile using GCC:
     $ gcc demo2.c -o demo2 -llpsolve55
 */
 
-#include "lp_lib.h"
+#include <lpsolve/lp_lib.h>
 
 int demo()
 {
