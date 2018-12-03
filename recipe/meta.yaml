@@ -11,26 +11,22 @@ source:
     md5: 3be57261fc41dd8e210f54017220d5f7
 
 build:
-    number: 1
+    number: 1001
 
 
 requirements:
     build:
-      - cmake  # [win]
+      - cmake
       - {{ compiler('c') }}
     host:
 
 test:
-    requires:
-      - python {{ os.environ.get('PY_VER', '') + '*' }}  # [win]
-    files:
-      - demo.c
-    commands:
-      - lp_solve -h
-      - test -f ${PREFIX}/include/lpsolve/lp_lib.h  # [unix]
-      - if not exist %PREFIX%\\Library\\include\\lpsolve\\lp_lib.h exit 1  # [win]
-      - python -c "import ctypes; ctypes.cdll[r'${PREFIX}/lib/liblpsolve55${SHLIB_EXT}']"  # [unix]
-      - python -c "import ctypes; ctypes.cdll[r'%PREFIX%\Library\bin\lpsolve55.dll']"  # [win]
+  commands:
+    - lp_solve -h
+    - test -f ${PREFIX}/include/lpsolve/lp_lib.h  # [unix]
+    - test -f ${PREFIX}/lib/liblpsolve55${SHLIB_EXT}  # [unix]
+    - if not exist %PREFIX%\\Library\\include\\lpsolve\\lp_lib.h exit 1  # [win]
+    - if not exist %PREFIX%\\Library\\bin\\lpsolve55.dll exit 1  # [win]
 
 about:
     home: http://lpsolve.sourceforge.net/5.5/
