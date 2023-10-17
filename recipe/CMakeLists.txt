@@ -5,11 +5,9 @@
 # License: Public Domain
 #
 
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.13)
 
-if (NOT DEFINED CMAKE_BUILD_TYPE)
-  set (CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
-endif ()
+set (CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 
 project(lpsolve C)
 
@@ -18,7 +16,7 @@ set(LPSOLVE_VERSION_MINOR 5)
 set(LPSOLVE_VERSION_PATCH 2)
 set(LPSOLVE_VERSION ${LPSOLVE_VERSION_MAJOR}.${LPSOLVE_VERSION_MINOR}.${LPSOLVE_VERSION_PATCH})
 
-option (BUILD_SHARED_LIBS "Build NLopt as a shared library" ON)
+option (BUILD_SHARED_LIBS "Build lp_solve as a shared library" ON)
 
 # Set up install directories
 include(GNUInstallDirs)
@@ -106,18 +104,18 @@ endif()
 include(CheckSymbolExists)
 check_symbol_exists(isnan math.h HAVE_ISNAN)
 if(NOT HAVE_ISNAN)
-	set_property(TARGET lpsolve55 APPEND PROPERTY COMPILE_DEFINITIONS NOISNAN)
+  set_property(TARGET lpsolve55 APPEND PROPERTY COMPILE_DEFINITIONS NOISNAN)
 endif()
 
 include (CheckLibraryExists)
 check_library_exists(m ceil "" HAVE_LIBM)
 if (HAVE_LIBM)
-  target_link_libraries (lpsolve55 m)
+  target_link_libraries (lpsolve55 PRIVATE m)
 endif ()
 
 check_library_exists(dl dlopen "" HAVE_LIBDL)
 if (HAVE_LIBDL)
-  target_link_libraries (lpsolve55 dl)
+  target_link_libraries (lpsolve55 PRIVATE dl)
 endif ()
 
 # Set version of library
@@ -158,4 +156,4 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/lpsolveConfig.cmake ${CMAKE_CURRENT_BI
 add_executable (lp_solve lp_solve/lp_solve.c)
 target_include_directories(lp_solve PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_link_libraries (lp_solve lpsolve55)
-install (TARGETS lp_solve DESTINATION bin)
+install (TARGETS lp_solve DESTINATION ${CMAKE_INSTALL_BINDIR})
