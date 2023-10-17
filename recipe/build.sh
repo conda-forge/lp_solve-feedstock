@@ -3,7 +3,7 @@
 # see https://github.com/PADrend/ThirdParty
 cp ${RECIPE_DIR}/CMakeLists.txt ${RECIPE_DIR}/lpsolveConfig.cmake.in .
 
-cmake -LAH -G "Ninja" \
+cmake ${CMAKE_ARGS} -LAH -G "Ninja" \
   -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_INSTALL_LIBDIR=lib \
   -DCMAKE_PREFIX_PATH=${PREFIX} \
   -B build
